@@ -66,6 +66,8 @@ _srcname="linux-${pkgver}-xanmod${xanmod}"
 
 source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar."{xz,sign}
         "https://github.com/xanmod/linux/releases/download/${pkgver}-xanmod${xanmod}/patch-${pkgver}-xanmod${xanmod}.xz"
+        "https://github.com/HougeLangley/xanmod-archlinux/releases/download/v5.13-patches/0001-v1-UKSM-5.13.patch"
+        "https://github.com/HougeLangley/xanmod-archlinux/releases/download/v5.13-patches/0002-v1-cjktty-5.13.patch"
         choose-gcc-optimization.sh)
 validpgpkeys=(
     'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linux Torvalds
@@ -84,7 +86,8 @@ sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
-            '')
+            'SKIP'
+            'SKIP')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
