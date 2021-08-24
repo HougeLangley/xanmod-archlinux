@@ -20,7 +20,7 @@ fi
 
 ## Choose between GCC and CLANG config (default is GCC)
 if [ -z ${_compiler+x} ]; then
-  _compiler=gcc
+  _compiler=clang
 fi
 
 # Compile ONLY used modules to VASTLY reduce the number of modules built
@@ -65,7 +65,6 @@ source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar
         "https://github.com/xanmod/linux/releases/download/${pkgver}-rt${_rt}-xanmod${xanmod}/patch-${pkgver}-rt${_rt}-xanmod${xanmod}.xz"
         "https://github.com/HougeLangley/xanmod-archlinux/releases/download/v5.13-patches/0001-v1-UKSM-5.13.patch"
         "https://github.com/HougeLangley/xanmod-archlinux/releases/download/v5.13-patches/0002-v1-cjktty-5.13.patch"
-        "https://github.com/HougeLangley/xanmod-archlinux/releases/download/v5.13-patches/goodix-gpd-win3.patch"
         choose-gcc-optimization.sh)
 validpgpkeys=(
     'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linux Torvalds
@@ -85,7 +84,6 @@ sha256sums=('3f6baa97f37518439f51df2e4f3d65a822ca5ff016aa8e60d2cc53b95a6c89d9'
             '5b8a5dceb10f17f2f8324cdee6a2aa23707ca9384e5046f8c7fbe1d4aa9d2442'
             '7c9a4f8c7acaf1fa9747fcf1d84a7b3bc5e832ff7b98beda19fae839ce8fd7a5'
             'e6cdbffff04b66c526dc1494caa4852fe372f2ccc77885d121af95ed02d1b2b2'
-            'dbdff9f53c9f7c2bcf86084e51b9c24cbb8097e610c4faf12fe83e6b7849c41d'
             '1ac18cad2578df4a70f9346f7c6fccbb62f042a0ee0594817fdef9f2704904ee')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
