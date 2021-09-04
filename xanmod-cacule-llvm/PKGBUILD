@@ -44,7 +44,7 @@ _makenconfig=y
 
 ### IMPORTANT: Do no edit below this line unless you know what you're doing
 
-pkgbase=linux-xanmod
+pkgbase=linux-xanmod-cacule
 _major=5.14
 pkgver=${_major}.1
 _branch=5.x
@@ -65,7 +65,7 @@ options=('!strip')
 _srcname="linux-${pkgver}-xanmod${xanmod}"
 
 source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar."{xz,sign}
-        "https://github.com/xanmod/linux/releases/download/${pkgver}-xanmod${xanmod}/patch-${pkgver}-xanmod${xanmod}.xz"
+        "https://github.com/xanmod/linux/releases/download/${pkgver}-xanmod${xanmod}-cacule/patch-${pkgver}-xanmod${xanmod}-cacule.xz"
         "https://github.com/HougeLangley/customkernel/releases/download/v5.14-others/v1-cjktty-5.14.patch"
         choose-gcc-optimization.sh)
 validpgpkeys=(
@@ -83,7 +83,7 @@ validpgpkeys=(
 
 sha256sums=('7e068b5e0d26a62b10e5320b25dce57588cbbc6f781c090442138c9c9c3271b2'
             'SKIP'
-            'dea4b648fbffb1a41b1f8ef907e3dc386bb525ee82ae4314de7bcf1aca580b0e'
+            'c7a49605ceb4a9f50ba96fc19ec3073907b2628c9d2faebca705d14160afba30'
             'e5c7208bc862461c3640449e863b8f489883e8080cdd752db7977fe9ad840d31'
             '1ac18cad2578df4a70f9346f7c6fccbb62f042a0ee0594817fdef9f2704904ee')
 
@@ -95,7 +95,7 @@ prepare() {
   cd linux-${_major}
 
   # Apply Xanmod patch
-  patch -Np1 -i ../patch-${pkgver}-xanmod${xanmod}
+  patch -Np1 -i ../patch-${pkgver}-xanmod${xanmod}-cacule
 
   msg2 "Setting version..."
   scripts/setlocalversion --save-scmversion
