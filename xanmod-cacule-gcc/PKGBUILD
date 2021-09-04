@@ -66,7 +66,7 @@ _srcname="linux-${pkgver}-xanmod${xanmod}"
 
 source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar."{xz,sign}
         "https://github.com/xanmod/linux/releases/download/${pkgver}-xanmod${xanmod}-cacule/patch-${pkgver}-xanmod${xanmod}-cacule.xz"
-        "https://gitlab.com/sirlucjan/kernel-patches/-/raw/master/5.14/ll-patches/0001-LL-kconfig-add-750Hz-timer-interrupt-kernel-config-o.patch"
+        "https://github.com/HougeLangley/customkernel/releases/download/v5.14-others/750HZ.patch"
         "https://github.com/HougeLangley/customkernel/releases/download/v5.14-others/v1-cjktty-5.14.patch"
         choose-gcc-optimization.sh)
 validpgpkeys=(
@@ -85,7 +85,7 @@ validpgpkeys=(
 sha256sums=('7e068b5e0d26a62b10e5320b25dce57588cbbc6f781c090442138c9c9c3271b2'
             'SKIP'
             'c7a49605ceb4a9f50ba96fc19ec3073907b2628c9d2faebca705d14160afba30'
-            '7279f66a767f1ac902e05923a779accc8b4e7b463a2768c077cadad5ab825fd8'
+            '7740247b7c10d40e749e06eb4aa61708efad5054352ed28c4ac258d13b6d188c'
             'e5c7208bc862461c3640449e863b8f489883e8080cdd752db7977fe9ad840d31'
             '1ac18cad2578df4a70f9346f7c6fccbb62f042a0ee0594817fdef9f2704904ee')
 
