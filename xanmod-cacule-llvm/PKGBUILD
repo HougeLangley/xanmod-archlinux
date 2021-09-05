@@ -50,13 +50,15 @@ pkgver=${_major}.1
 _branch=5.x
 xanmod=1
 pkgrel=${xanmod}
-pkgdesc='Linux Xanmod - Current Stable (STABLE)'
+pkgdesc='Linux Xanmod Cacule Build By Clang'
 url="http://www.xanmod.org/"
 arch=(x86_64)
 
 license=(GPL2)
 makedepends=(
-  bc cpio kmod libelf perl tar xz
+  bc kmod libelf pahole cpio perl tar xz
+  xmlto python-sphinx python-sphinx_rtd_theme graphviz imagemagick
+  git
 )
 if [ "${_compiler}" = "clang" ]; then
   makedepends+=(clang llvm lld python)
@@ -70,17 +72,9 @@ source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar
         "https://github.com/HougeLangley/customkernel/releases/download/v5.14-others/v1-cjktty-5.14.patch"
         choose-gcc-optimization.sh)
 validpgpkeys=(
-    'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linux Torvalds
+    'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linus Torvalds
     '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
 )
-
-# Archlinux patches
-#_commit="ec9e9a4219fe221dec93fa16fddbe44a34933d8d"
-#_patches=()
-#for _patch in ${_patches[@]}; do
-#    #source+=("${_patch}::https://git.archlinux.org/svntogit/packages.git/plain/trunk/${_patch}?h=packages/linux&id=${_commit}")
-#    source+=("${_patch}::https://raw.githubusercontent.com/archlinux/svntogit-packages/${_commit}/trunk/${_patch}")
-#done
 
 sha256sums=('7e068b5e0d26a62b10e5320b25dce57588cbbc6f781c090442138c9c9c3271b2'
             'SKIP'
@@ -99,7 +93,7 @@ prepare() {
   # Apply Xanmod patch
   patch -Np1 -i ../patch-${pkgver}-xanmod${xanmod}-cacule
 
-  msg2 "Setting version..."
+  echo "Setting version..."
   scripts/setlocalversion --save-scmversion
   echo "-$pkgrel" > localversion.10-pkgrel
   #echo "${pkgbase#linux-xanmod}" > localversion.20-pkgname
@@ -110,7 +104,7 @@ prepare() {
     src="${src%%::*}"
     src="${src##*/}"
     [[ $src = *.patch ]] || continue
-    msg2 "Applying patch $src..."
+    echo "Applying patch $src..."
     patch -Np1 < "../$src"
   done
 
@@ -132,7 +126,7 @@ prepare() {
 
   # User set. See at the top of this file
   if [ "$use_tracers" = "n" ]; then
-    msg2 "Disabling FUNCTION_TRACER/GRAPH_TRACER only if we are not compiling with clang..."
+    echo "Disabling FUNCTION_TRACER/GRAPH_TRACER only if we are not compiling with clang..."
     if [ "${_compiler}" = "gcc" ]; then
       scripts/config --disable CONFIG_FUNCTION_TRACER \
                      --disable CONFIG_STACK_TRACER
@@ -140,7 +134,7 @@ prepare() {
   fi
 
   if [ "$use_numa" = "n" ]; then
-    msg2 "Disabling NUMA..."
+    echo "Disabling NUMA..."
     scripts/config --disable CONFIG_NUMA
   fi
 
@@ -155,11 +149,11 @@ prepare() {
     if [ -f "${_myconfig}" ] && [ "$(wc -l <"${_myconfig}")" -gt "0" ]; then
       if grep -q 'scripts/config' "${_myconfig}"; then
         # myconfig is a partial file. Executing as a script
-        msg2 "Applying myconfig..."
+        echo "Applying myconfig..."
         bash -x "${_myconfig}"
       else
         # myconfig is a full config file. Replacing default .config
-        msg2 "Using user CUSTOM config..."
+        echo "Using user CUSTOM config..."
         cp -f "${_myconfig}" .config
       fi
       echo
@@ -171,10 +165,10 @@ prepare() {
   # See https://aur.archlinux.org/packages/modprobed-db
   if [ "$_localmodcfg" = "y" ]; then
     if [ -f $HOME/.config/modprobed.db ]; then
-      msg2 "Running Steven Rostedt's make localmodconfig now"
+      echo "Running Steven Rostedt's make localmodconfig now"
       make LLVM=$_LLVM LLVM_IAS=$_LLVM LSMOD=$HOME/.config/modprobed.db localmodconfig
     else
-      msg2 "No modprobed.db data found"
+      echo "No modprobed.db data found"
       exit 1
     fi
   fi
@@ -182,7 +176,7 @@ prepare() {
   make LLVM=$_LLVM LLVM_IAS=$_LLVM olddefconfig
 
   make -s kernelrelease > version
-  msg2 "Prepared %s version %s" "$pkgbase" "$(<version)"
+  echo "Prepared %s version %s" "$pkgbase" "$(<version)"
 
   [[ -z "$_makenconfig" ]] || make LLVM=$_LLVM LLVM_IAS=$_LLVM nconfig
 
@@ -205,7 +199,7 @@ _package() {
   local kernver="$(<version)"
   local modulesdir="$pkgdir/usr/lib/modules/$kernver"
 
-  msg2 "Installing boot image..."
+  echo "Installing boot image..."
   # systemd expects to find the kernel here to allow hibernation
   # https://github.com/systemd/systemd/commit/edda44605f06a41fb86b7ab8128dcf99161d2344
   install -Dm644 "$(make -s image_name)" "$modulesdir/vmlinuz"
@@ -213,7 +207,7 @@ _package() {
   # Used by mkinitcpio to name the kernel
   echo "$pkgbase" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
 
-  msg2 "Installing modules..."
+  echo "Installing modules..."
   make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 modules_install
 
   # remove build and source links
@@ -227,7 +221,7 @@ _package-headers() {
   cd linux-${_major}
   local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
 
-  msg2 "Installing build files..."
+  echo "Installing build files..."
   install -Dt "$builddir" -m644 .config Makefile Module.symvers System.map \
     localversion.* version vmlinux
   install -Dt "$builddir/kernel" -m644 kernel/Makefile
@@ -240,7 +234,7 @@ _package-headers() {
   # add xfs and shmem for aufs building
   mkdir -p "$builddir"/{fs/xfs,mm}
 
-  msg2 "Installing headers..."
+  echo "Installing headers..."
   cp -t "$builddir" -a include
   cp -t "$builddir/arch/x86" -a arch/x86/include
   install -Dt "$builddir/arch/x86/kernel" -m644 arch/x86/kernel/asm-offsets.s
@@ -248,18 +242,18 @@ _package-headers() {
   install -Dt "$builddir/drivers/md" -m644 drivers/md/*.h
   install -Dt "$builddir/net/mac80211" -m644 net/mac80211/*.h
 
-  # http://bugs.archlinux.org/task/13146
+  # https://bugs.archlinux.org/task/13146
   install -Dt "$builddir/drivers/media/i2c" -m644 drivers/media/i2c/msp3400-driver.h
 
-  # http://bugs.archlinux.org/task/20402
+  # https://bugs.archlinux.org/task/20402
   install -Dt "$builddir/drivers/media/usb/dvb-usb" -m644 drivers/media/usb/dvb-usb/*.h
   install -Dt "$builddir/drivers/media/dvb-frontends" -m644 drivers/media/dvb-frontends/*.h
   install -Dt "$builddir/drivers/media/tuners" -m644 drivers/media/tuners/*.h
 
-  msg2 "Installing KConfig files..."
+  echo "Installing KConfig files..."
   find . -name 'Kconfig*' -exec install -Dm644 {} "$builddir/{}" \;
 
-  msg2 "Removing unneeded architectures..."
+  echo "Removing unneeded architectures..."
   local arch
   for arch in "$builddir"/arch/*/; do
     [[ $arch = */x86/ ]] && continue
@@ -267,16 +261,16 @@ _package-headers() {
     rm -r "$arch"
   done
 
-  msg2 "Removing documentation..."
+  echo "Removing documentation..."
   rm -r "$builddir/Documentation"
 
-  msg2 "Removing broken symlinks..."
+  echo "Removing broken symlinks..."
   find -L "$builddir" -type l -printf 'Removing %P\n' -delete
 
-  msg2 "Removing loose objects..."
+  echo "Removing loose objects..."
   find "$builddir" -type f -name '*.o' -printf 'Removing %P\n' -delete
 
-  msg2 "Stripping build tools..."
+  echo "Stripping build tools..."
   local file
   while read -rd '' file; do
     case "$(file -bi "$file")" in
@@ -291,9 +285,9 @@ _package-headers() {
     esac
   done < <(find "$builddir" -type f -perm -u+x ! -name vmlinux -print0)
 
-  msg2 "Stripping vmlinux..."
+  echo "Stripping vmlinux..."
   strip -v $STRIP_STATIC "$builddir/vmlinux"
-  msg2 "Adding symlink..."
+  echo "Adding symlink..."
   mkdir -p "$pkgdir/usr/src"
   ln -sr "$builddir" "$pkgdir/usr/src/$pkgbase"
 }
