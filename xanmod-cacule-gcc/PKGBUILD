@@ -46,7 +46,7 @@ _makenconfig=y
 
 pkgbase=linux-xanmod-cacule
 _major=5.14
-pkgver=${_major}.2
+pkgver=${_major}.3
 _branch=5.x
 xanmod=1
 pkgrel=${xanmod}
@@ -78,7 +78,7 @@ validpgpkeys=(
 
 sha256sums=('7e068b5e0d26a62b10e5320b25dce57588cbbc6f781c090442138c9c9c3271b2'
             'SKIP'
-            'da5c775fd2b982b1020e9590907f523224a173485972086cd6b16542bf3399f3'
+            'ea231fc9f961fd819f8e74c477e6b5a1e848ffabea6a64c8ebff4458a3496f6b'
             '7740247b7c10d40e749e06eb4aa61708efad5054352ed28c4ac258d13b6d188c'
             'e5c7208bc862461c3640449e863b8f489883e8080cdd752db7977fe9ad840d31'
             '1ac18cad2578df4a70f9346f7c6fccbb62f042a0ee0594817fdef9f2704904ee')
@@ -96,7 +96,7 @@ prepare() {
   echo "Setting version..."
   scripts/setlocalversion --save-scmversion
   echo "-$pkgrel" > localversion.10-pkgrel
-  #echo "${pkgbase#linux-xanmod}" > localversion.20-pkgname
+  echo "${pkgbase#linux-xanmod}" > localversion.20-pkgname
 
   # Myown patches
   local src
