@@ -91,6 +91,22 @@ prepare() {
     scripts/config --disable CONFIG_NUMA
   fi
 
+  for _myconfig in "${SRCDEST}/myconfig" "${HOME}/.config/linux-xanmod/myconfig" "${XDG_CONFIG_HOME}/linux-xanmod/myconfig" ; do
+    if [ -f "${_myconfig}" ] && [ "$(wc -l <"${_myconfig}")" -gt "0" ]; then
+      if grep -q 'scripts/config' "${_myconfig}"; then
+        # myconfig is a partial file. Executing as a script
+        msg2 "Applying myconfig..."
+        bash -x "${_myconfig}"
+      else
+        # myconfig is a full config file. Replacing default .config
+        msg2 "Using user CUSTOM config..."
+        cp -f "${_myconfig}" .config
+      fi
+      echo
+      break
+    fi
+  done
+
   make -s kernelrelease > version
   echo "Prepared %s version %s" "$pkgbase" "$(<version)"
 
