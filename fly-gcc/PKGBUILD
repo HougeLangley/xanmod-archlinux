@@ -1,56 +1,28 @@
-## Look inside 'choose-gcc-optimization.sh' to choose your microarchitecture
-## Valid numbers between: 0 to 99
-## Default is: 0 => generic
-## Good option if your package is for one machine: 98 (Intel native) or 99 (AMD native)
-if [ -z ${_microarchitecture+x} ]; then
-  _microarchitecture=15
-fi
-
-## Disable NUMA since most users do not have multiple processors. Breaks CUDA/NvEnc.
-## Archlinux and Xanmod enable it by default.
-## Set variable "use_numa" to: n to disable (possibly increase performance)
-##                             y to enable  (stock default)
 if [ -z ${use_numa+x} ]; then
   use_numa=n
 fi
 
-## For performance you can disable FUNCTION_TRACER/GRAPH_TRACER. Limits debugging and analyzing of the kernel.
-## Stock Archlinux and Xanmod have this enabled. 
-## Set variable "use_tracers" to: n to disable (possibly increase performance)
-##                                y to enable  (stock default)
 if [ -z ${use_tracers+x} ]; then
   use_tracers=n
 fi
 
-## Choose between GCC and CLANG config (default is GCC)
+if [ -z ${_compress_modules+x} ]; then
+  _compress_modules=n
+fi
+
 if [ -z ${_compiler+x} ]; then
-  _compiler=clang
+  _compiler=gcc
 fi
 
-# Compile ONLY used modules to VASTLY reduce the number of modules built
-# and the build time.
-#
-# To keep track of which modules are needed for your specific system/hardware,
-# give module_db script a try: https://aur.archlinux.org/packages/modprobed-db
-# This PKGBUILD read the database kept if it exists
-#
-# More at this wiki page ---> https://wiki.archlinux.org/index.php/Modprobed-db
-if [ -z ${_localmodcfg} ]; then
-  _localmodcfg=n
-fi
-
-# Tweak kernel options prior to a build via nconfig
 _makenconfig=y
 
-### IMPORTANT: Do no edit below this line unless you know what you're doing
-
-pkgbase=linux-xanmod
-_major=5.14
-pkgver=${_major}.12
+pkgbase=linux-fly
+_major=5.18
+pkgver=${_major}.1
 _branch=5.x
 xanmod=1
 pkgrel=${xanmod}
-pkgdesc='Linux Xanmod Build By Clang'
+pkgdesc='Linux Xanmod Build By GCC'
 url="http://www.xanmod.org/"
 arch=(x86_64)
 
@@ -60,26 +32,22 @@ makedepends=(
   xmlto python-sphinx python-sphinx_rtd_theme graphviz imagemagick
   git
 )
-if [ "${_compiler}" = "clang" ]; then
-  makedepends+=(clang llvm lld python)
-fi
+
 options=('!strip')
 _srcname="linux-${pkgver}-xanmod${xanmod}"
 
 source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar."{xz,sign}
         "https://github.com/xanmod/linux/releases/download/${pkgver}-xanmod${xanmod}/patch-${pkgver}-xanmod${xanmod}.xz"
-        "https://github.com/HougeLangley/customkernel/releases/download/v5.14-others/v1-cjktty-5.14.patch"
-        choose-gcc-optimization.sh)
+        "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-${_major}.patch")
 validpgpkeys=(
     'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linus Torvalds
     '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
 )
 
-sha256sums=('7e068b5e0d26a62b10e5320b25dce57588cbbc6f781c090442138c9c9c3271b2'
+sha256sums=('51f3f1684a896e797182a0907299cc1f0ff5e5b51dd9a55478ae63a409855cee'
             'SKIP'
-            '4e364c48b398a3e647bc0bcfb123ca763a8346ccd69cff39c214075d32f6cd50'
-            'e5c7208bc862461c3640449e863b8f489883e8080cdd752db7977fe9ad840d31'
-            '1ac18cad2578df4a70f9346f7c6fccbb62f042a0ee0594817fdef9f2704904ee')
+            '049c902ae35b9f2890027fda29d3e3632aba64a68f46dc4b26f2d15469de5ebe'
+            'fc28710ae5ca788ff3f6f5812b9156178a9b6a6c9229b5414656e306e5a3ff1d')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
@@ -88,15 +56,15 @@ export KBUILD_BUILD_TIMESTAMP=${KBUILD_BUILD_TIMESTAMP:-$(date -Ru${SOURCE_DATE_
 prepare() {
   cd linux-${_major}
 
-  # Apply Xanmod patch
+  # Apply patch
   patch -Np1 -i ../patch-${pkgver}-xanmod${xanmod}
 
   echo "Setting version..."
   scripts/setlocalversion --save-scmversion
   echo "-$pkgrel" > localversion.10-pkgrel
-  echo "${pkgbase#linux-xanmod}" > localversion.20-pkgname
+  echo "${pkgbase#linux-fly}" > localversion.20-pkgname
 
-  # Myown patches
+  # cjk patches
   local src
   for src in "${source[@]}"; do
     src="${src%%::*}"
@@ -107,20 +75,7 @@ prepare() {
   done
 
   # Applying configuration
-  cp -vf CONFIGS/xanmod/${_compiler}/config .config
-  # enable LTO_CLANG_THIN
-  if [ "${_compiler}" = "clang" ]; then
-    scripts/config --disable LTO_CLANG_FULL
-    scripts/config --enable LTO_CLANG_THIN
-    _LLVM=1
-  fi
-
-  # CONFIG_STACK_VALIDATION gives better stack traces. Also is enabled in all official kernel packages by Archlinux team
-  scripts/config --enable CONFIG_STACK_VALIDATION
-
-  # Enable IKCONFIG following Arch's philosophy
-  scripts/config --enable CONFIG_IKCONFIG \
-                 --enable CONFIG_IKCONFIG_PROC
+  cp -vf CONFIGS/xanmod/gcc/config_x86-64-v3 .config
 
   # User set. See at the top of this file
   if [ "$use_tracers" = "n" ]; then
@@ -136,47 +91,8 @@ prepare() {
     scripts/config --disable CONFIG_NUMA
   fi
 
-  # Let's user choose microarchitecture optimization in GCC
-  sh ${srcdir}/choose-gcc-optimization.sh $_microarchitecture
-
-  # This is intended for the people that want to build this package with their own config
-  # Put the file "myconfig" at the package folder (this will take preference) or "${XDG_CONFIG_HOME}/linux-xanmod/myconfig"
-  # If we detect partial file with scripts/config commands, we execute as a script
-  # If not, it's a full config, will be replaced
-  for _myconfig in "${SRCDEST}/myconfig" "${HOME}/.config/linux-xanmod/myconfig" "${XDG_CONFIG_HOME}/linux-xanmod/myconfig" ; do
-    if [ -f "${_myconfig}" ] && [ "$(wc -l <"${_myconfig}")" -gt "0" ]; then
-      if grep -q 'scripts/config' "${_myconfig}"; then
-        # myconfig is a partial file. Executing as a script
-        echo "Applying myconfig..."
-        bash -x "${_myconfig}"
-      else
-        # myconfig is a full config file. Replacing default .config
-        echo "Using user CUSTOM config..."
-        cp -f "${_myconfig}" .config
-      fi
-      echo
-      break
-    fi
-  done
-
-  ### Optionally load needed modules for the make localmodconfig
-  # See https://aur.archlinux.org/packages/modprobed-db
-  if [ "$_localmodcfg" = "y" ]; then
-    if [ -f $HOME/.config/modprobed.db ]; then
-      echo "Running Steven Rostedt's make localmodconfig now"
-      make LLVM=$_LLVM LLVM_IAS=$_LLVM LSMOD=$HOME/.config/modprobed.db localmodconfig
-    else
-      echo "No modprobed.db data found"
-      exit 1
-    fi
-  fi
-
-  make LLVM=$_LLVM LLVM_IAS=$_LLVM olddefconfig
-
   make -s kernelrelease > version
   echo "Prepared %s version %s" "$pkgbase" "$(<version)"
-
-  [[ -z "$_makenconfig" ]] || make LLVM=$_LLVM LLVM_IAS=$_LLVM nconfig
 
   # save configuration for later reuse
   cat .config > "${SRCDEST}/config.last"
@@ -184,7 +100,7 @@ prepare() {
 
 build() {
   cd linux-${_major}
-  make LLVM=$_LLVM LLVM_IAS=$_LLVM all
+  make all
 }
 
 _package() {
