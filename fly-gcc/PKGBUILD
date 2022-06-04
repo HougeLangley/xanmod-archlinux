@@ -75,7 +75,7 @@ prepare() {
   done
 
   # Applying configuration
-  cp -vf CONFIGS/xanmod/gcc/config_x86-64-v3 .config
+  cp -vf CONFIGS/xanmod/gcc/config_x86-64-v2 .config
 
   # User set. See at the top of this file
   if [ "$use_tracers" = "n" ]; then
@@ -93,6 +93,10 @@ prepare() {
 
   make -s kernelrelease > version
   echo "Prepared %s version %s" "$pkgbase" "$(<version)"
+
+  if [ "$_makenconfig" = "y" ]; then
+    make menuconfig
+  fi
 
   # save configuration for later reuse
   cat .config > "${SRCDEST}/config.last"
