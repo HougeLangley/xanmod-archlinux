@@ -1,17 +1,8 @@
-if [ -z ${use_numa+x} ]; then
-  use_numa=n
-fi
-
-if [ -z ${use_tracers+x} ]; then
-  use_tracers=n
-fi
-
-if [ -z ${_compress_modules+x} ]; then
-  _compress_modules=n
-fi
-
+use_numa=n
+use_tracers=n
+_compress_modules=n
+_compiler=gcc
 _makenconfig=y
-
 pkgbase=linux-fly
 _major=5.18
 pkgver=${_major}.1
@@ -30,7 +21,7 @@ makedepends=(
 )
 
 options=('!strip')
-_srcname="linux-${pkgver}-xanmod${xanmod}"
+_srcname="linux-${pkgver}-fly${xanmod}"
 
 source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar."{xz,sign}
         "https://github.com/xanmod/linux/releases/download/${pkgver}-xanmod${xanmod}/patch-${pkgver}-xanmod${xanmod}.xz"
