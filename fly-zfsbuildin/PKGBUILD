@@ -35,7 +35,7 @@ prepare() {
   cd linux-${pkgver}-xanmod${xanmod}
 
   # Applying configuration
-  cp -vf CONFIGS/xanmod/gcc/config_x86-64-v3 .config
+  cp -vf CONFIGS/xanmod/gcc/config_x86-64 .config
 
   # User set. See at the top of this file
   if [ "$use_tracers" = "n" ]; then
