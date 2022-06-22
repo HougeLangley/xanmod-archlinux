@@ -1,15 +1,15 @@
-use_numa=n
+use_numa=y
 use_tracers=n
 _compress_modules=n
 _compiler=gcc 
 _makenconfig=y
-pkgbase=linux-fly
+pkgbase=linux-poweredge
 _major=5.18
 pkgver=${_major}.4
 _branch=5.x
 xanmod=1
 pkgrel=${xanmod}
-pkgdesc='Linux Xanmod Build By GCC'
+pkgdesc='Linux Xanmod, CJKTTY, ZFSBuiltin'
 url="http://www.xanmod.org/"
 arch=(x86_64)
 
@@ -21,7 +21,7 @@ makedepends=(
 )
 
 options=('!strip')
-_srcname="linux-${pkgver}-fly${xanmod}"
+_srcname="linux-${pkgver}-poweredge${xanmod}"
 
 source=("https://github.com/HougeLangley/xanmod-archlinux/releases/download/${pkgver}-zfsbuildin/linux-${pkgver}-xanmod${xanmod}.tar.xz")
 
