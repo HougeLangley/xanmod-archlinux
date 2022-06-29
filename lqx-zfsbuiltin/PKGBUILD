@@ -5,7 +5,7 @@ _compiler=gcc
 _makenconfig=y
 pkgbase=linux-fly
 _major=5.18
-pkgver=${_major}.7
+pkgver=${_major}.8
 _branch=5.x
 lqx=1
 pkgrel=${lqx}
@@ -25,7 +25,7 @@ _srcname="linux-${pkgver}-fly${lqx}"
 
 source=("https://github.com/HougeLangley/xanmod-archlinux/releases/download/${pkgver}-lqx${lqx}-zfsbuiltin/linux-${pkgver}-lqx${lqx}.tar.xz")
 
-sha256sums=('8216d4a6d3d0513a8667c18241b8d4b13aad1f3bb03c3846941ad80451642663')
+sha256sums=('c194b52dfde35ef66ccab1c09fd339383ce29d6e1da8444d9f2bb09f10648d72')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
