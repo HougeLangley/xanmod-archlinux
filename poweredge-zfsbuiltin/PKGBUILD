@@ -5,7 +5,7 @@ _compiler=gcc
 _makenconfig=y
 pkgbase=linux-poweredge
 _major=5.18
-pkgver=${_major}.6
+pkgver=${_major}.8
 _branch=5.x
 xanmod=1
 pkgrel=${xanmod}
@@ -25,7 +25,7 @@ _srcname="linux-${pkgver}-poweredge${xanmod}"
 
 source=("https://github.com/HougeLangley/xanmod-archlinux/releases/download/${pkgver}-zfsbuiltin/linux-${pkgver}-xanmod${xanmod}.tar.xz")
 
-sha256sums=('b78575c907c143a4a180fa8034c6517fe7a6d1104cddb63946064c0ea3f04f91')
+sha256sums=('814a9a506731abe37f65c5d81159de9d5039a4e8af7d344fcc5d2cbff8b2cb80')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
