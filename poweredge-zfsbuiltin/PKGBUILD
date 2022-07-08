@@ -5,12 +5,12 @@ _compiler=gcc
 _makenconfig=y
 pkgbase=linux-poweredge
 _major=5.18
-pkgver=${_major}.8
+pkgver=${_major}.10
 _branch=5.x
-xanmod=1
-pkgrel=${xanmod}
-pkgdesc='Linux Xanmod, CJKTTY, ZFSBuiltin'
-url="http://www.xanmod.org/"
+lqx=1
+pkgrel=${lqx}
+pkgdesc='Linux Lquorix, CJKTTY, ZFSBuiltin'
+url="https://liquorix.net"
 arch=(x86_64)
 
 license=(GPL2)
@@ -21,21 +21,21 @@ makedepends=(
 )
 
 options=('!strip')
-_srcname="linux-${pkgver}-poweredge${xanmod}"
+_srcname="linux-${pkgver}-poweredge${lqx}"
 
-source=("https://github.com/HougeLangley/xanmod-archlinux/releases/download/${pkgver}-zfsbuiltin/linux-${pkgver}-xanmod${xanmod}.tar.xz")
+source=("https://github.com/HougeLangley/xanmod-archlinux/releases/download/${pkgver}-lqx${lqx}-zfsbuiltin/linux-${pkgver}-lqx${lqx}.tar.xz")
 
-sha256sums=('814a9a506731abe37f65c5d81159de9d5039a4e8af7d344fcc5d2cbff8b2cb80')
+sha256sums=('b536f4a92f36123265cf29afe9d3bef7368b774e2fa557c070c7f46f1a5cafe8')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
 export KBUILD_BUILD_TIMESTAMP=${KBUILD_BUILD_TIMESTAMP:-$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})}
 
 prepare() {
-  cd linux-${pkgver}-xanmod${xanmod}
+  cd linux-${pkgver}-lqx${lqx}
 
   # Applying configuration
-  cp -vf CONFIGS/xanmod/gcc/config_x86-64 .config
+  cp -vf config-arch-64 .config
 
   # User set. See at the top of this file
   if [ "$use_tracers" = "n" ]; then
@@ -65,17 +65,17 @@ prepare() {
 }
 
 build() {
-  cd linux-${pkgver}-xanmod${xanmod}
+  cd linux-${pkgver}-lqx${lqx}
   make all
 }
 
 _package() {
-  pkgdesc="The Linux kernel and modules with Xanmod patches"
+  pkgdesc="The Linux kernel and modules with lqx patches"
   depends=(coreutils kmod initramfs)
   optdepends=('crda: to set the correct wireless channels of your country'
               'linux-firmware: firmware images needed for some devices')
 
-  cd linux-${pkgver}-xanmod${xanmod}
+  cd linux-${pkgver}-lqx${lqx}
   local kernver="$(<version)"
   local modulesdir="$pkgdir/usr/lib/modules/$kernver"
 
@@ -98,7 +98,7 @@ _package-headers() {
   pkgdesc="Headers and scripts for building modules for the $pkgdesc kernel"
   depends=(pahole)
 
-  cd linux-${pkgver}-xanmod${xanmod}
+  cd linux-${pkgver}-lqx${lqx}
   local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
 
   echo "Installing build files..."

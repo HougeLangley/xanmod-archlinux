@@ -9,7 +9,7 @@ pkgver=${_major}.10
 _branch=5.x
 lqx=1
 pkgrel=${lqx}
-pkgdesc='Linux lqx, CJKTTY, ZFSBuiltin'
+pkgdesc='Linux Lquorix, CJKTTY, ZFSBuiltin'
 url="https://liquorix.net"
 arch=(x86_64)
 
