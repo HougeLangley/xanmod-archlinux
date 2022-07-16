@@ -5,7 +5,7 @@ _compiler=gcc
 _makenconfig=y
 pkgbase=linux-poweredge
 _major=5.18
-pkgver=${_major}.11
+pkgver=${_major}.12
 _branch=5.x
 lqx=1
 pkgrel=${lqx}
@@ -25,7 +25,7 @@ _srcname="linux-${pkgver}-poweredge${lqx}"
 
 source=("https://github.com/HougeLangley/xanmod-archlinux/releases/download/${pkgver}-lqx${lqx}-zfsbuiltin/linux-${pkgver}-lqx${lqx}.tar.xz")
 
-sha256sums=('b709ac699be412ea56ce2dd4aba432d87c63b5347ecd2125ae3ac54604600125')
+sha256sums=('333ffeed92432a63a2984fbde856b79412ca403a449a33a87c60975e8d56a8bc')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
