@@ -7,7 +7,7 @@ pkgbase=linux-fly
 _major=5.18
 pkgver=${_major}.14
 _branch=5.x
-lqx=1
+lqx=2
 pkgrel=${lqx}
 pkgdesc='Linux Lquorix, CJKTTY, ZFSBuiltin'
 url="https://liquorix.net"
@@ -25,7 +25,7 @@ _srcname="linux-${pkgver}-fly${lqx}"
 
 source=("https://github.com/HougeLangley/xanmod-archlinux/releases/download/${pkgver}-lqx${lqx}-zfsbuiltin/linux-${pkgver}-lqx${lqx}.tar.xz")
 
-sha256sums=('4a71200baf7cfd972019e34cd94b3bae2639b49a68a965b5bec95649ae9db05a')
+sha256sums=('e130e66c8798f14805bbf448b1a14bfb10e7a2a30439b9205766848cde387f94')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
