@@ -8,7 +8,7 @@ _major=5.18
 pkgver=${_major}.15
 _branch=5.x
 lqx=2
-pkgrel=${lqx}
+pkgrel=2
 pkgdesc='Linux Lquorix, CJKTTY, ZFSBuiltin'
 url="https://liquorix.net"
 arch=(x86_64)
@@ -25,7 +25,7 @@ _srcname="linux-${pkgver}-poweredge${lqx}"
 
 source=("https://github.com/HougeLangley/xanmod-archlinux/releases/download/${pkgver}-lqx${lqx}-zfsbuiltin/linux-${pkgver}-lqx${lqx}.tar.xz")
 
-sha256sums=('454054426b37d1b8e8c8fc550f05da20b5f03c8ae29376cd1de948f609ddc040')
+sha256sums=('677d35e783fc2d72c5dc6327c5a7f3cd52f798535967dc579f11272aae7309fc')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
