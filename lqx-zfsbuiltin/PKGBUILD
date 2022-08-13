@@ -4,8 +4,8 @@ _compress_modules=n
 _compiler=gcc 
 _makenconfig=y
 pkgbase=linux-fly
-_major=5.18
-pkgver=${_major}.17
+_major=5.19
+pkgver=${_major}.1
 _branch=5.x
 lqx=1
 pkgrel=1
@@ -25,7 +25,7 @@ _srcname="linux-${pkgver}-fly${lqx}"
 
 source=("https://github.com/HougeLangley/xanmod-archlinux/releases/download/${pkgver}-lqx${lqx}-zfsbuiltin/linux-${pkgver}-lqx${lqx}.tar.xz")
 
-sha256sums=('1902f40a1d97f43f1b949e52a092134e09baac400d5eae46bbf543c8d11099e1')
+sha256sums=('6f17499eaf96d4373fb7fa7276e4d65d9b1d3dc91af2f8ab3ec9d114117fda39')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
