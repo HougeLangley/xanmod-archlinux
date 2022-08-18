@@ -32,10 +32,7 @@ export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
 export KBUILD_BUILD_TIMESTAMP=${KBUILD_BUILD_TIMESTAMP:-$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})}
 
 prepare() {
-  cd linux-${_major}
-
-  # Apply patch
-  patch -Np1 -i ../patch-${pkgver}-xanmod${xanmod}
+  cd linux-${pkgver}
 
   echo "Setting version..."
   scripts/setlocalversion --save-scmversion
@@ -73,7 +70,7 @@ prepare() {
 }
 
 build() {
-  cd linux-${_major}
+  cd linux-${pkgver}
   make all
 }
 
@@ -83,7 +80,7 @@ _package() {
   optdepends=('crda: to set the correct wireless channels of your country'
               'linux-firmware: firmware images needed for some devices')
 
-  cd linux-${_major}
+  cd linux-${pkgver}
   local kernver="$(<version)"
   local modulesdir="$pkgdir/usr/lib/modules/$kernver"
 
@@ -106,7 +103,7 @@ _package-headers() {
   pkgdesc="Headers and scripts for building modules for the $pkgdesc kernel"
   depends=(pahole)
 
-  cd linux-${_major}
+  cd linux-${pkgver}
   local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
 
   echo "Installing build files..."
