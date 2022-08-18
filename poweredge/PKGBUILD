@@ -4,11 +4,11 @@ _compress_modules=n
 _compiler=gcc
 _makenconfig=y
 pkgbase=linux-poweredge
-_major=5.18
-pkgver=${_major}.4
+_major=5.19
+pkgver=${_major}.2
 _branch=5.x
 xanmod=1
-pkgrel=${xanmod}
+pkgrel=1
 pkgdesc='Linux Xanmod Build By GCC'
 url="http://www.xanmod.org/"
 arch=(x86_64)
@@ -23,18 +23,9 @@ makedepends=(
 options=('!strip')
 _srcname="linux-${pkgver}-poweredge${xanmod}"
 
-source=("https://cdn.kernel.org/pub/linux/kernel/v${_branch}/linux-${_major}.tar."{xz,sign}
-        "https://github.com/xanmod/linux/releases/download/${pkgver}-xanmod${xanmod}/patch-${pkgver}-xanmod${xanmod}.xz"
-        "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-${_major}.patch")
-validpgpkeys=(
-    'ABAF11C65A2970B130ABE3C479BE3E4300411886' # Linus Torvalds
-    '647F28654894E3BD457199BE38DBBDC86092693E' # Greg Kroah-Hartman
-)
+source=("https://github.com/HougeLangley/xanmod-archlinux/releases/download/${pkgver}-xanmod1-zfsbuiltin/linux-${pkgver}-xanmod${xanmod}.tar.xz")
 
-sha256sums=('51f3f1684a896e797182a0907299cc1f0ff5e5b51dd9a55478ae63a409855cee'
-            'SKIP'
-            '6cae7e7e978adac6bfdc10b94d8e53b410ff53f4585b1c2db536b259d40d444c'
-            'fc28710ae5ca788ff3f6f5812b9156178a9b6a6c9229b5414656e306e5a3ff1d')
+sha256sums=('b37cffa95cae78bdb8eed15eeb3fb5e743182a0901ba3529f2b9d4efefac2878')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
@@ -50,16 +41,6 @@ prepare() {
   scripts/setlocalversion --save-scmversion
   echo "-$pkgrel" > localversion.10-pkgrel
   echo "${pkgbase#linux-poweredge}" > localversion.20-pkgname
-
-  # cjk patches
-  local src
-  for src in "${source[@]}"; do
-    src="${src%%::*}"
-    src="${src##*/}"
-    [[ $src = *.patch ]] || continue
-    echo "Applying patch $src..."
-    patch -Np1 < "../$src"
-  done
 
   # Applying configuration
   cp -vf CONFIGS/xanmod/gcc/config_x86-64 .config
