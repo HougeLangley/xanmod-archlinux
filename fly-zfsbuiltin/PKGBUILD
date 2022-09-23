@@ -21,7 +21,7 @@ makedepends=(
 )
 
 options=('!strip')
-_srcname="linux-${pkgver}-fly${xanmod}"
+_srcname="linux-${pkgver}-xanmod${xanmod}"
 
 source=("https://github.com/xanmod/linux/archive/refs/tags/${pkgver}-xanmod${xanmod}.tar.gz"
         "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-${_major}.patch"
@@ -35,7 +35,7 @@ export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
 export KBUILD_BUILD_TIMESTAMP=${KBUILD_BUILD_TIMESTAMP:-$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})}
 
 prepare() {
-  cd linux-${pkgver}-xanmod${xanmod}
+  cd ${_srcname}
 
   # Applying cjktty patch
   patch -Np1 -i ../cjktty-${_major}.patch
@@ -71,7 +71,7 @@ prepare() {
 }
 
 build() {
-  cd linux-${pkgver}-xanmod${xanmod}
+  cd ${_srcname}
   make all
 }
 
@@ -81,7 +81,7 @@ _package() {
   optdepends=('crda: to set the correct wireless channels of your country'
               'linux-firmware: firmware images needed for some devices')
 
-  cd linux-${pkgver}-xanmod${xanmod}
+  cd ${_srcname}
   local kernver="$(<version)"
   local modulesdir="$pkgdir/usr/lib/modules/$kernver"
 
@@ -104,7 +104,7 @@ _package-headers() {
   pkgdesc="Headers and scripts for building modules for the $pkgdesc kernel"
   depends=(pahole)
 
-  cd linux-${pkgver}-xanmod${xanmod}
+  cd ${_srcname}
   local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
 
   echo "Installing build files..."
