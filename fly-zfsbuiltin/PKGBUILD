@@ -5,7 +5,7 @@ _compiler=gcc
 _makenconfig=y
 pkgbase=linux-fly
 _major=5.19
-pkgver=${_major}.11
+pkgver=${_major}.12
 _branch=5.x
 xanmod=1
 pkgrel=1
@@ -27,7 +27,7 @@ source=("https://github.com/xanmod/linux/archive/refs/tags/${pkgver}-xanmod${xan
         "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-${_major}.patch"
 )
 
-sha256sums=('38817f584cb410677f90f4640b7b87e66909ad0a5c583dbbca4b6ae22f80e047'
+sha256sums=('0f96ccf82b98887050fd5124b61d288b0367be254c3fbeb489b0c3ee69af4781'
             '333ae6edd8ea9cdbae846323aa8052148c89ee0cae3068481522705fc89e0c36')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
