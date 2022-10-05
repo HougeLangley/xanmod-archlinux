@@ -4,9 +4,9 @@ _compress_modules=n
 _compiler=gcc 
 _makenconfig=y
 pkgbase=linux-fly
-_major=5.19
-pkgver=${_major}.12
-_branch=5.x
+_major=6.0
+pkgver=${_major}.0
+_branch=6.x
 xanmod=1
 pkgrel=1
 pkgdesc='Linux Xanmod, CJKTTY, ZFSBuiltin'
@@ -24,11 +24,11 @@ options=('!strip')
 _srcname="linux-${pkgver}-xanmod${xanmod}"
 
 source=("https://github.com/xanmod/linux/archive/refs/tags/${pkgver}-xanmod${xanmod}.tar.gz"
-        "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v5.x/cjktty-${_major}.patch"
+        "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v${_branch}/cjktty-${_major}.patch"
 )
 
-sha256sums=('0f96ccf82b98887050fd5124b61d288b0367be254c3fbeb489b0c3ee69af4781'
-            '333ae6edd8ea9cdbae846323aa8052148c89ee0cae3068481522705fc89e0c36')
+sha256sums=('8ca039ecf6103fe5bb2ae8f93e20a87125196e1ac342bd074a61dee398b48dfb'
+            '8db3be0f5ea5fcbc3c3ed219145ddeeeb787d9681ab7d935a38917482011b43f')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
 export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
