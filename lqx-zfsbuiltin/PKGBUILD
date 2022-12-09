@@ -3,10 +3,10 @@ use_tracers=n
 _compress_modules=n
 _compiler=gcc 
 _makenconfig=y
-pkgbase=linux-fly
-_major=5.19
-pkgver=${_major}.6
-_branch=5.x
+pkgbase=linux-liquorix
+_major=6.0
+pkgver=${_major}.12
+_branch=6.x
 lqx=1
 pkgrel=1
 pkgdesc='Linux Lquorix, CJKTTY, ZFSBuiltin'
@@ -21,9 +21,13 @@ makedepends=(
 )
 
 options=('!strip')
-_srcname="linux-${pkgver}-fly${lqx}"
+_srcname="linux-${pkgver}-liquorix${lqx}"
 
-source=("https://github.com/HougeLangley/xanmod-archlinux/releases/download/${pkgver}-lqx${lqx}-zfsbuiltin/linux-${pkgver}-lqx${lqx}.tar.xz")
+source=(
+  "https://mirrors.ustc.edu.cn/kernel.org/linux/kernel/v${_branch}/linux-${_major}.tar.xz"
+  "https://github.com/zen-kernel/zen-kernel/releases/download/v${pkgver}-lqx${lqx}/v${pkgver}-lqx${lqx}.patch.xz"
+  "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v${_branch}/cjktty-${_major}.patch"
+)
 
 sha256sums=('a0a278328ba328160a28d0660a0fd1d0fee495728eb1e7beebe7182a8ac80463')
 
@@ -32,7 +36,7 @@ export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-makepkg}
 export KBUILD_BUILD_TIMESTAMP=${KBUILD_BUILD_TIMESTAMP:-$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})}
 
 prepare() {
-  cd linux-${pkgver}-lqx${lqx}
+  cd linux-${pkgver}-liquorix${lqx}
 
   # Applying configuration
   cp -vf config-arch-64 .config
