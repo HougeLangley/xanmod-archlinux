@@ -5,7 +5,7 @@ _compiler=gcc
 _makenconfig=y
 pkgbase=linux-xanmod-edge
 _major=6.3
-pkgver=${_major}.3
+pkgver=${_major}.4
 _branch=6.x
 xanmod=1
 pkgrel=1
@@ -27,7 +27,7 @@ source=("https://github.com/xanmod/linux/archive/refs/tags/${pkgver}-xanmod${xan
         "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v${_branch}/cjktty-${_major}.patch"
 )
 
-sha256sums=('1909008f1dac6df1a57bef3ba4a8f1b92299ce712021fb402a9197c1492a2820'
+sha256sums=('9e72ec0158c3c435b03d0df89a91bc7c19c1069070b8975b8249b3c7f9a06cc3'
             '427b16aeece1b62667ab34d45e43e4f476f5f4875daf8553597c95e2bfa22ef1')
 
 export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-archlinux}
