@@ -8,7 +8,7 @@ _major=6.7
 pkgver=${_major}.1
 _branch=6.x
 xanmod=1
-pkgrel=1
+pkgrel=2
 pkgdesc='Linux Kernel For LegionGo'
 url="http://www.xanmod.org/"
 arch=(x86_64)
@@ -21,9 +21,10 @@ makedepends=(
 )
 
 options=('!strip')
-_srcname="linux-${pkgver}-xanmod${xanmod}"
+_srcname="linux-${_major}"
 
-source=("https://github.com/xanmod/linux/archive/refs/tags/${pkgver}-xanmod${xanmod}.tar.gz"
+source=("https://mirrors.ustc.edu.cn/kernel.org/linux/kernel/v6.x/linux-${_major}.tar.xz"
+        "https://github.com/HougeLangley/hougeapps-overlay/releases/download/patch-${pkgver}-xanmod${xanmod}/patch-${pkgver}-xanmod${xanmod}.patch"
         "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v${_branch}/cjktty-${_major}.patch"
         "https://hougearch.litterhougelangley.club/doc/add_lenovo_legion_go_controllers.patch"
         "https://github.com/johnfanv2/LenovoLegionLinux/releases/download/v0.0.9-prerelease/0001-Add-legion-laptop-v0.0.9.patch"
@@ -31,6 +32,7 @@ source=("https://github.com/xanmod/linux/archive/refs/tags/${pkgver}-xanmod${xan
 )
 
 sha256sums=('SKIP'
+            'SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
@@ -42,6 +44,9 @@ export KBUILD_BUILD_TIMESTAMP=${KBUILD_BUILD_TIMESTAMP:-$(date -Ru${SOURCE_DATE_
 
 prepare() {
   cd ${_srcname}
+
+  # Applying xanmod patches
+  patch -Np1 -i ../patch-${pkgver}-xanmod${xanmod}.patch
 
   # Applying cjktty patch
   patch -Np1 -i ../cjktty-${_major}.patch
