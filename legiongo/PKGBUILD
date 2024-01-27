@@ -77,7 +77,7 @@ prepare() {
 
 build() {
   cd ${_srcname}
-  LLVM=1 LLVM_IAS=1 make ARCH=${ARCH} ${BUILD_FLAGS[*]} -j$(nproc) all
+  LLVM=1 LLVM_IAS=1 make -j$(nproc) all
 }
 
 _package() {
