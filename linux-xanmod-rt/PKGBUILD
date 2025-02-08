@@ -1,13 +1,13 @@
 use_tracers=n
 _compress_modules=n
 _makenconfig=y
-pkgbase=linux-legion
-_major=6.7
-pkgver=${_major}.4
+pkgbase=linux-xanmod-rt
+_major=6.12
+pkgver=${_major}.12
 _branch=6.x
 xanmod=1
 pkgrel=1
-pkgdesc='Linux Kernel For LegionGo'
+pkgdesc='Linux Xanmod real-time version'
 url="http://www.xanmod.org/"
 arch=(x86_64)
 
@@ -19,16 +19,12 @@ makedepends=(
 )
 
 options=('!strip')
-_srcname="linux-${_major}"
+_srcname="linux-${pkgver}-rt-xanmod${xanmod}"
 
-source=("https://mirrors.ustc.edu.cn/kernel.org/linux/kernel/v6.x/linux-${_major}.tar.xz"
-        "https://github.com/HougeLangley/hougeapps-overlay/releases/download/patch-${pkgver}-xanmod${xanmod}/patch-${pkgver}-xanmod${xanmod}.patch"
-        "https://raw.githubusercontent.com/zhmars/cjktty-patches/master/v${_branch}/cjktty-${_major}.patch"
+source=("https://gitlab.com/xanmod/linux/-/archive/${pkgver}-rt-xanmod${xanmod}/linux-${pkgver}-rt-xanmod${xanmod}.tar.gz"
 )
 
-sha256sums=('SKIP'
-            'SKIP'
-            'SKIP')
+sha256sums=('SKIP')
 
 export KBUILD_BUILD_HOST=archlinux
 export KBUILD_BUILD_USER=$pkgbase
@@ -37,13 +33,6 @@ export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EP
 prepare() {
   cd ${_srcname}
 
-  # Applying xanmod patches
-  patch -Np1 -i ../patch-${pkgver}-xanmod${xanmod}.patch
-
-  # Applying cjktty patch
-  patch -Np1 -i ../cjktty-${_major}.patch
-
-  # Applying configuration
   cp -vf CONFIGS/xanmod/gcc/config_x86-64-v4 .config
 
   make olddefconfig
@@ -62,6 +51,7 @@ prepare() {
 build() {
   cd ${_srcname}
   make -j$(nproc) all
+  make -C tools/bpf/bpftool vmlinux.h feature-clang-bpf-co-re=1
 }
 
 _package() {
