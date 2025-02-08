@@ -33,7 +33,7 @@ export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EP
 prepare() {
   cd ${_srcname}
 
-  cp -vf CONFIGS/xanmod/gcc/config_x86-64-v4 .config
+  cp -vf CONFIGS/xanmod-rt/gcc/config_x86-64-v3 .config
 
   make olddefconfig
 
